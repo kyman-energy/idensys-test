@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "name": "Industrial Heat Playground",
+    "region": "Indonesia",
+    "base_year": 2025,
+    "end_year": 2035,
+    "periods": [2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035],
+    "discount_rate": 0.08,
+    "currency": "USD_2025",
+    "objective": "min_cost",
+    "carbon_price": {"2025": 0, "2030": 50, "2035": 100},
+    "time_slice_mode": "annual"
+  },
+  "nodes": [{"id":"plant","type":"plant","name":"Industrial Plant"}],
+  "time_slices": [],
+  "commodities": [
+    {"id":"gas","name":"Natural Gas","type":"fuel","unit":"GJ","price":{"2025":10,"2030":11,"2035":12},"allow_import":true,"balance_mode":"supply_only"},
+    {"id":"electricity","name":"Electricity","type":"electricity","unit":"MWh","price":{"2025":80,"2030":85,"2035":90},"allow_import":true,"balance_mode":"supply_only"},
+    {"id":"heat","name":"Process Heat","type":"energy_service","unit":"GJ","allow_import":false,"balance_mode":"strict"},
+    {"id":"co2","name":"CO2","type":"emission","unit":"tCO2","emission_carrier":true,"allow_import":false,"allow_export":false,"balance_mode":"unbalanced"}
+  ],
+  "demand_drivers": [],
+  "services": [{"id":"process_heat","name":"Process Heat","unit":"GJ","node_id":"plant","demand":{"2025":100000,"2026":102000,"2027":104000,"2028":106000,"2029":108000,"2030":110000,"2031":112000,"2032":114000,"2033":116000,"2034":118000,"2035":120000}}],
+  "technologies": [
+    {"id":"gas_boiler","name":"Natural Gas Boiler","service_id":"process_heat","node_id":"plant","lifetime":20,"lead_time":0,"capex":{"2025":80,"2030":75,"2035":70},"fixed_opex":{"2025":2},"variable_opex":{"2025":0.5},"availability":{"2025":0.9},"min_load":{"2025":0},"decision":"continuous","unit_capacity":1000,"max_capacity":{},"time_slice_availability":{}},
+    {"id":"electric_boiler","name":"Electric Boiler","service_id":"process_heat","node_id":"plant","lifetime":20,"lead_time":0,"capex":{"2025":130,"2030":115,"2035":105},"fixed_opex":{"2025":2},"variable_opex":{"2025":0.3},"availability":{"2025":0.95},"min_load":{"2025":0},"decision":"continuous","unit_capacity":1000,"max_capacity":{},"time_slice_availability":{}},
+    {"id":"heat_pump","name":"Industrial Heat Pump","service_id":"process_heat","node_id":"plant","lifetime":15,"lead_time":0,"capex":{"2025":220,"2030":190,"2035":170},"fixed_opex":{"2025":3},"variable_opex":{"2025":0.2},"availability":{"2025":0.9},"min_load":{"2025":0},"decision":"continuous","unit_capacity":1000,"max_capacity":{},"time_slice_availability":{}}
+  ],
+  "flows": [
+    {"technology_id":"gas_boiler","commodity_id":"gas","direction":"input","coefficient":{"2025":1.1765}},
+    {"technology_id":"gas_boiler","commodity_id":"heat","direction":"output","coefficient":{"2025":1}},
+    {"technology_id":"electric_boiler","commodity_id":"electricity","direction":"input","coefficient":{"2025":0.2778}},
+    {"technology_id":"electric_boiler","commodity_id":"heat","direction":"output","coefficient":{"2025":1}},
+    {"technology_id":"heat_pump","commodity_id":"electricity","direction":"input","coefficient":{"2025":0.3333}},
+    {"technology_id":"heat_pump","commodity_id":"heat","direction":"output","coefficient":{"2025":1}}
+  ],
+  "stock": [], "storages": [], "network_links": [],
+  "constraints": [],
+  "scenarios": [
+    {"id":"baseline","name":"Baseline","parent_id":null,"overrides":[]},
+    {"id":"net_zero","name":"Net Zero","parent_id":"baseline","overrides":[]}
+  ]
+}
